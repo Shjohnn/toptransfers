@@ -101,4 +101,15 @@ class Top50ExpenditureView(View):
 
 class AccuratePredictionView(View):
     def get(self, request):
-        return render(request, 'stats/accurate-prediction.html')
+        transfers = Transfer.objects.all()
+        accurate_transfers=[]
+        for transfer in transfers:
+            price = transfer.price
+            tft_price= transfer.tft_price
+            if price/tft_price == 1:
+                accurate_transfers.append(transfer)
+        context={
+            "accurate_transfers":accurate_transfers
+        }
+
+        return render(request, 'stats/accurate-prediction.html',context)
